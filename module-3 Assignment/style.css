@@ -1,0 +1,78 @@
+.nav{
+    background-color: rgb(95, 63, 63);
+    margin:0px;
+    padding:10px;
+    height: 80px;
+   
+    
+}
+button{
+    width: 40px;
+    height:40px;
+  background:rgb(117, 87, 87);
+  color:aliceblue;
+    margin-right: 20px;
+    padding:0;
+    position: absolute;
+    right: 10px;
+    top: 30px;
+    border-radius: 10px;
+}
+.bar-icon{
+    width:30px;
+    height:1px;
+    padding:1px;
+    margin:2px;
+    display: block;
+    text-align: center;
+    border:1px solid black;
+
+}
+hr{
+    margin: 0%;
+   
+}
+
+li{
+    margin: 0%;
+    padding: 0%;
+}
+li a{
+    display: block;
+   margin:0;
+  
+    text-align: center;
+   
+}
+a:hover{
+    text-decoration:none;
+    background-color: rgb(117, 87, 87) ;
+    font-size: 30px;
+}
+a{
+    color: black;
+    padding:10px;
+    
+}
+h2{
+    font-weight: bold;
+    text-align: center;
+}
+h3{
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+.content{
+    margin: 0px 10px 0px 10px;
+    text-align: left;
+    background-color: rgb(140, 118, 118) ;
+    padding:10px;
+}
+@media screen and (max-width:767.2px) {
+    .content{
+        margin: 0px 10% 0px 10%;
+    }
+    
+}
