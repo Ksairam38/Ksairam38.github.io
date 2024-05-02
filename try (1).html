@@ -43,8 +43,30 @@
                            console.log('User cancelled login or did not fully authorize.'); }
             });
         };
-
-      </script>
+ function launchWhatsAppSignup() {
+    // Conversion tracking code
+    fbq && fbq('trackCustom', 'WhatsAppOnboardingStart', {appId: '2690570337772800', feature: 'whatsapp_embedded_signup'});
+    
+    // Launch Facebook login
+    FB.login(function (response) {
+      if (response.authResponse) {
+        const accessToken = response.authResponse.accessToken;
+        //Use this token to call the debug_token API and get the shared WABA's ID
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    }, {
+      scope: 'whatsapp_business_management, whatsapp_business_messaging',
+      extras: {
+        feature: 'whatsapp_embedded_signup',
+        setup: {
+          ... // Prefilled data can go here
+        }
+      }
+    });
+  }
+</script>
+    
 
 <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
 </fb:login-button>
