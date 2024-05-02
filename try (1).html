@@ -8,6 +8,19 @@
       version:  'v12.0' //Graph API version
     });
   };
+function loginWithFacebook() {
+    FB.login(function(response) {
+        if (response.authResponse) {
+            // User has logged in successfully
+            console.log('Welcome! Fetching your information....');
+            // Now you can fetch user information
+            fetchUserInfo();
+        } else {
+            // User cancelled login or did not fully authorize
+            console.log('User cancelled login or did not fully authorize.');
+        }
+    });
+}
 
   // Load the JavaScript SDK asynchronously
   (function (d, s, id) {
