@@ -9,17 +9,32 @@
     <p id="profile"></p>
 
     <script>
-        function launchWhatsAppSignup() {
-            // Conversion tracking code
-            fbq && fbq('trackCustom', 'WhatsAppOnboardingStart', {appId: 'your-facebook-app-id', feature: 'whatsapp_embedded_signup'});
+        // Load the Facebook SDK asynchronously
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
 
-            // Add the Facebook SDK for JavaScript
+        // Function to handle Facebook login
+        function launchFacebookLogin() {
+            // Add your Facebook App ID here
+            var appId = '2690570337772800';
+
+            // Conversion tracking code (if needed)
+            if (typeof fbq !== 'undefined') {
+                fbq('trackCustom', 'FacebookLoginStart', { appId: appId });
+            }
+
+            // Initialize the Facebook SDK
             window.fbAsyncInit = function() {
                 FB.init({
-                    appId: '2690570337772800', // Replace with your app ID
+                    appId: appId,
                     autoLogAppEvents: true,
                     xfbml: true,
-                    version: 'v15.0' // Replace with the latest Graph API version
+                    version: 'v15.0'
                 });
 
                 // Check if the user is already logged in
@@ -38,24 +53,13 @@
                             } else {
                                 console.log('User canceled login or did not fully authorize.');
                             }
-                        }, {
-                            scope: 'email' // Specify the permissions you need
-                        });
+                        }, { scope: 'email' }); // Specify the permissions you need
                     }
                 });
             };
-
-            // Load the Facebook SDK asynchronously
-            (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "https://connect.facebook.net/en_US/sdk.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
         }
     </script>
 
-    <button onclick="launchWhatsAppSignup()" style="background-color: #1877f2; border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; height: 40px; padding: 0 24px;">Login with Facebook</button>
+    <button onclick="launchFacebookLogin()" style="background-color: #1877f2; border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; height: 40px; padding: 0 24px;">Login with Facebook</button>
 </body>
 </html>
