@@ -1,56 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head></head>
-  <body>
-
+<head>
+    <meta charset="UTF-8">
+    <title>Facebook Login</title>
+</head>
+<body>
     <h2>Add Facebook Login to your webpage</h2>
+    <p id="profile"></p>
 
-      <!-- Set the element id for the JSON response -->
-    
-      <p id="profile"></p>
-
-      <script>
-  
-        <!-- Add the Facebook SDK for Javascript -->
-  
-        (function(d, s, id){
-                              var js, fjs = d.getElementsByTagName(s)[0];
-                              if (d.getElementById(id)) {return;}
-                              js = d.createElement(s); js.id = id;
-                              js.src = "https://connect.facebook.net/en_US/sdk.js";
-                              fjs.parentNode.insertBefore(js, fjs);
-                            }(document, 'script', 'facebook-jssdk')
-        );
-
-
+    <script>
+        // Add the Facebook SDK for JavaScript
         window.fbAsyncInit = function() {
-            <!-- Initialize the SDK with your app and the Graph API version for your app -->
             FB.init({
-                      appId            : '2690570337772800',
-                      xfbml            : true,
-                      version          : 'v19.0'
+                appId: '2690570337772800', // Replace with your app ID
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v15.0' // Replace with the latest Graph API version
+            });
+
+            // Check if the user is already logged in
+            FB.getLoginStatus(function(response) {
+                if (response.status === 'connected') {
+                    // User is already logged in, you can get their information here
+                    FB.api('/me', function(response) {
+                        console.log('User information:', response);
                     });
-            <!-- If you are logged in, automatically get your name and email adress, your public profile information -->
-           FB.login(function (response) {
-      if (response.authResponse) {
-        const accessToken = response.authResponse.accessToken;
-        //Use this token to call the debug_token API and get the shared WABA's ID
-      } else {
-        console.log('User cancelled login or did not fully authorize.');
-      }
-    }, {
-      scope: 'whatsapp_business_management, whatsapp_business_messaging',
-      extras: {
-        feature: 'whatsapp_embedded_signup',
-        setup: {
-          ... // Prefilled data can go here
-        }
-      }
-    });
-  
+                } else {
+                    // User is not logged in, prompt them to log in
+                    FB.login(function(response) {
+                        if (response.authResponse) {
+                            // User logged in successfully
+                            console.log('User authenticated');
+                        } else {
+                            console.log('User canceled login or did not fully authorize.');
+                        }
+                    }, {
+                        scope: 'email' // Specify the permissions you need
+                    });
+                }
+            });
         };
 
-      </script>
-
-  </body>
+        // Load the Facebook SDK asynchronously
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+</body>
 </html>
