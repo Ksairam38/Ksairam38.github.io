@@ -1,49 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head></head>
-  <body>
+<script>
+  window.fbAsyncInit = function () {
+    // JavaScript SDK configuration and setup
+    FB.init({
+      appId:    '2690570337772800', // Facebook App ID
+      cookie:   true, // enable cookies
+      xfbml:    true, // parse social plugins on this page
+      version:  'v19.0' //Graph API version
+    });
+  };
 
-    <h2>Add Facebook Login to your webpage</h2>
+  // Load the JavaScript SDK asynchronously
+  (function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
 
-      <!-- Set the element id for the JSON response -->
+  // Facebook Login with JavaScript SDK
+  function launchWhatsAppSignup() {
+    // Conversion tracking code
+    fbq && fbq('trackCustom', 'WhatsAppOnboardingStart', {appId: '2690570337772800', feature: 'whatsapp_embedded_signup'});
     
-      <p id="profile"></p>
-
-      <script>
-  
-        <!-- Add the Facebook SDK for Javascript -->
-  
-        (function(d, s, id){
-                              var js, fjs = d.getElementsByTagName(s)[0];
-                              if (d.getElementById(id)) {return;}
-                              js = d.createElement(s); js.id = id;
-                              js.src = "https://connect.facebook.net/en_US/sdk.js";
-                              fjs.parentNode.insertBefore(js, fjs);
-                            }(document, 'script', 'facebook-jssdk')
-        );
-
-
-        window.fbAsyncInit = function() {
-            <!-- Initialize the SDK with your app and the Graph API version for your app -->
-            FB.init({
-                      appId            : '2690570337772800',
-                      xfbml            : true,
-                      version          : 'v5.0'
-                    });
-            <!-- If you are logged in, automatically get your name and email adress, your public profile information -->
-            FB.login(function(response) {
-                      if (response.authResponse) {
-                           console.log('Welcome!  Fetching your information.... ');
-                           FB.api('/me', {fields: 'name, email'}, function(response) {
-                               document.getElementById("profile").innerHTML = "Good to see you, " + response.name + ". i see your email address is " + response.email
-                           });
-                      } else { 
-                           <!-- If you are not logged in, the login dialog will open for you to login asking for permission to get your public profile and email -->
-                           console.log('User cancelled login or did not fully authorize.'); }
-            });
-        };
-
-      </script>
-
-  </body>
-</html>
+    // Launch Facebook login
+    FB.login(function (response) {
+      if (response.authResponse) {
+        const accessToken = response.authResponse.accessToken;
+        //Use this token to call the debug_token API and get the shared WABA's ID
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    }, {
+      scope: 'whatsapp_business_management, whatsapp_business_messaging',
+      extras: {
+        feature: 'whatsapp_embedded_signup',
+        setup: {
+          ... // Prefilled data can go here
+        }
+      }
+    });
+  }
+</script>
+<button onclick="launchWhatsAppSignup()" style="background-color: #1877f2; border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; height: 40px; padding: 0 24px;">Login with Facebook</button>
