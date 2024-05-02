@@ -9,52 +9,53 @@
     <p id="profile"></p>
 
     <script>
-         function launchWhatsAppSignup() {
-    // Conversion tracking code
-    fbq && fbq('trackCustom', 'WhatsAppOnboardingStart', {appId: 'your-facebook-app-id', feature: 'whatsapp_embedded_signup'});
-    
-        // Add the Facebook SDK for JavaScript
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId: '2690570337772800', // Replace with your app ID
-                autoLogAppEvents: true,
-                xfbml: true,
-                version: 'v15.0' // Replace with the latest Graph API version
-            });
+        function launchWhatsAppSignup() {
+            // Conversion tracking code
+            fbq && fbq('trackCustom', 'WhatsAppOnboardingStart', {appId: 'your-facebook-app-id', feature: 'whatsapp_embedded_signup'});
 
-            // Check if the user is already logged in
-            FB.getLoginStatus(function(response) {
-                if (response.status === 'connected') {
-                    // User is already logged in, you can get their information here
-                    FB.api('/me', function(response) {
-                        console.log('User information:', response);
-                    });
-                } else {
-                    // User is not logged in, prompt them to log in
-                    FB.login(function(response) {
-                        if (response.authResponse) {
-                            // User logged in successfully
-                            console.log('User authenticated');
-                        } else {
-                            console.log('User canceled login or did not fully authorize.');
-                        }
-                    }, {
-                        scope: 'email' // Specify the permissions you need
-                    });
-                }
-            });
-        };
+            // Add the Facebook SDK for JavaScript
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId: '2690570337772800', // Replace with your app ID
+                    autoLogAppEvents: true,
+                    xfbml: true,
+                    version: 'v15.0' // Replace with the latest Graph API version
+                });
 
-        // Load the Facebook SDK asynchronously
-        (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
+                // Check if the user is already logged in
+                FB.getLoginStatus(function(response) {
+                    if (response.status === 'connected') {
+                        // User is already logged in, you can get their information here
+                        FB.api('/me', function(response) {
+                            console.log('User information:', response);
+                        });
+                    } else {
+                        // User is not logged in, prompt them to log in
+                        FB.login(function(response) {
+                            if (response.authResponse) {
+                                // User logged in successfully
+                                console.log('User authenticated');
+                            } else {
+                                console.log('User canceled login or did not fully authorize.');
+                            }
+                        }, {
+                            scope: 'email' // Specify the permissions you need
+                        });
+                    }
+                });
+            };
+
+            // Load the Facebook SDK asynchronously
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "https://connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        }
     </script>
-      <button onclick="launchWhatsAppSignup()" style="background-color: #1877f2; border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; height: 40px; padding: 0 24px;">Login with Facebook</button>
 
+    <button onclick="launchWhatsAppSignup()" style="background-color: #1877f2; border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; height: 40px; padding: 0 24px;">Login with Facebook</button>
 </body>
-  </html>
+</html>
