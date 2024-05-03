@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Facebook Login</title>
     <!-- Facebook Pixel Code -->
-  
     <!-- End Facebook Pixel Code -->
 </head>
 <body>
@@ -20,39 +19,38 @@
                 version: 'v15.0' // Replace with the latest Graph API version
             });
 
-            // Load the Facebook SDK asynchronously
-            (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "https://connect.facebook.net/en_US/sdk.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
+            // Function to handle Facebook login
+            function launchWhatsAppSignup() {
+                // Conversion tracking code
+
+                // Launch Facebook login
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        const accessToken = response.authResponse.accessToken;
+                        // Use this token to call the debug_token API and get the shared WABA's ID
+                    } else {
+                        console.log('User cancelled login or did not fully authorize.');
+                    }
+                }, {
+                    scope: 'whatsapp_business_management,whatsapp_business_messaging',
+                    extras: {
+                        feature: 'whatsapp_embedded_signup',
+                        setup: {
+                            // Prefilled data can go here
+                        }
+                    }
+                });
+            }
         };
 
-        // Function to handle Facebook login
-        function launchWhatsAppSignup() {
-            // Conversion tracking code
-           
-
-            // Launch Facebook login
-            FB.login(function(response) {
-                if (response.authResponse) {
-                    const accessToken = response.authResponse.accessToken;
-                    // Use this token to call the debug_token API and get the shared WABA's ID
-                } else {
-                    console.log('User cancelled login or did not fully authorize.');
-                }
-            }, {
-                scope: 'whatsapp_business_management,whatsapp_business_messaging',
-                extras: {
-                    feature: 'whatsapp_embedded_signup',
-                    setup: {
-                        // Prefilled data can go here
-                    }
-                }
-            });
-        }
+        // Load the Facebook SDK asynchronously
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
     </script>
 
     <button onclick="launchWhatsAppSignup()" style="background-color: #1877f2; border: 0; border-radius: 4px; color: #fff; cursor: pointer; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: bold; height: 40px; padding: 0 24px;">Login with Facebook</button>
