@@ -53,7 +53,14 @@
                             } else {
                                 console.log('User canceled login or did not fully authorize.');
                             }
-                        }, { scope: 'email' }); // Specify the permissions you need
+                        },   scope: 'whatsapp_business_management, whatsapp_business_messaging',
+      extras: {
+        feature: 'whatsapp_embedded_signup',
+        setup: {
+          ... // Prefilled data can go here
+        }
+      }
+    }); // Specify the permissions you need
                     }
                 });
             };
