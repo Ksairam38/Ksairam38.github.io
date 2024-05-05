@@ -62,9 +62,11 @@ window.addEventListener('message', sessionInfoListener);
         feature: 'whatsapp_embedded_signup',
           "version": 2,
          "sessionInfoVersion": 2,
-        setup: {
-          // Prefilled data can go here
-        }
+      
+    // Bypass phone number selection
+    "featureType": "only_waba_sharing"
+  
+       
       }
     });
   }
