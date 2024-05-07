@@ -53,13 +53,37 @@
       // Launch Facebook login
       FB.login(function (response) { 
         console.log(response);
-        if (response.authResponse) {
-          const accessToken = response.authResponse.accessToken;
+       if (response.authResponse) {
+    const code = response.authResponse.code;
+    
+    // Construct the URL with the code as a query parameter
+    const url = `https://fastsagewave8.conveyor.cloud/api/EmbeddedSignUp?code=${code}`;
 
-          // Use this token to call the debug_token API and get the shared WABA's ID
-        } else {
-          console.log('User cancelled login or did not fully authorize.');
+    // Make a POST request using fetch
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Accept': '*/*'
         }
+    })
+    .then(response => {
+        // Check if the response is successful (status code 2xx)
+        if (response.ok) {
+            // Handle the successful response here
+            console.log('API call successful');
+        } else {
+            // Handle errors here
+            console.error('API call failed');
+        }
+    })
+    .catch(error => {
+        // Handle network errors here
+        console.error('Network error:', error);
+    });
+} else {
+    console.log('User cancelled login or did not fully authorize.');
+}
+
       }, {
         
         config_id: '450495777451034', // Replace with your configuration ID
