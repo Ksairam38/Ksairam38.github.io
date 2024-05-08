@@ -58,7 +58,7 @@
         connection.start().then(() => {
             console.log("Connected to SignalR hub");
         }).catch(err => {
-            console.error("Error connecting to SignalR hub:", err);
+            console.log("Error connecting to SignalR hub:");
         });
 
         connection.on("ReceiveMessage", (user, message) => {
@@ -68,14 +68,14 @@
         });
 
         function sendMessage() {
-            const groupName = "TestGroup"; // Specify the group name here
-            const user = "TestUser"; // Specify the username here
+            const groupName = "YourGroupName"; // Specify your group name here
+            const user = "YourUsername"; // Specify your username here
             const messageInput = document.getElementById("message-input");
             const message = messageInput.value.trim();
             if (message) {
                 connection.invoke("SendMessageToGroup", groupName, user, message)
                     .catch(err => {
-                        console.error("Error sending message:", err);
+                        console.log("Error sending message:");
                     });
                 messageInput.value = "";
             }
