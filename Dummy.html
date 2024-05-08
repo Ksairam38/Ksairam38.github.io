@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Chat</title>
+    <style>
+        #chat-container {
+            width: 300px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #message-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="message-container"></div>
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chathub")
+            .build();
+
+        connection.start().then(() => {
+            console.log("Connected to SignalR hub");
+        }).catch(err => {
+            console.error("Error connecting to SignalR hub:", err);
+        });
+
+        connection.on("ReceiveMessage", (user, message) => {
+            const messageContainer = document.getElementById("message-container");
+            messageContainer.innerHTML += `<p><strong>${user}:</strong> ${message}</p>`;
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        });
+
+        function sendMessage() {
+            const groupName = "TestGroup"; // Specify the group name here
+            const user = "TestUser"; // Specify the username here
+            const messageInput = document.getElementById("message-input");
+            const message = messageInput.value.trim();
+            if (message) {
+                connection.invoke("SendMessageToGroup", groupName, user, message)
+                    .catch(err => {
+                        console.error("Error sending message:", err);
+                    });
+                messageInput.value = "";
+            }
+        }
+    </script>
+</body>
+</html>
