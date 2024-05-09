@@ -1,12 +1,10 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SignalR Chat</title>
     <style>
-        /* CSS styles for the chat interface */
-        /* You can customize this according to your preference */
         #chat-container {
             width: 300px;
             margin: auto;
@@ -45,75 +43,43 @@
     </style>
 </head>
 <body>
-    <!-- HTML structure for the chat interface -->
     <div id="chat-container">
         <div id="message-container"></div>
         <input type="text" id="message-input" placeholder="Type your message...">
-        <button onclick="joinAndSendMessage()">Join Group & Send</button>
+        <button onclick="sendMessage()">Send</button>
     </div>
 
-    <!-- Include the SignalR JavaScript library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
     <script>
-        // JavaScript code for interacting with SignalR
-
-        // Create a new SignalR connection
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:44342/chathub") // Replace with your SignalR hub URL
+            .withUrl("https://localhost:44342/chathub")
             .build();
 
-        // Start the connection
         connection.start().then(() => {
             console.log("Connected to SignalR hub");
         }).catch(err => {
-            console.log("Error connecting to SignalR hub:", err);
+            console.log("Error connecting to SignalR hub:");
         });
 
-        // Function to join a group and send a message
-        function joinAndSendMessage() {
-            const groupName = prompt("Enter group name:"); // Prompt user to enter group name
-            if (groupName) {
-                connection.invoke("AddToGroup", groupName) // Invoke server method to add to group
-                    .then(() => {
-                        console.log(`Joined group: ${groupName}`);
-                        sendMessage(groupName); // Call sendMessage function with group name
-                    })
-                    .catch(err => {
-                        console.log("Error joining group:", err);
-                    });
-            } else {
-                alert("Please enter a group name.");
-            }
-        }
-
-        // Function to send a message
-        function sendMessage(groupName) {
-            const user = prompt("Enter your username:"); // Prompt user to enter username
-            if (user) {
-                const messageInput = document.getElementById("message-input");
-                const message = messageInput.value.trim();
-                if (message) {
-                    // Invoke the SendMessageToGroup method on the SignalR connection
-                    connection.invoke("SendMessageToGroup", groupName, user, message)
-                        .catch(err => {
-                            console.log("Error sending message:", err);
-                        });
-                    // Clear the input field after sending the message
-                    messageInput.value = "";
-                } else {
-                    alert("Please enter a message.");
-                }
-            } else {
-                alert("Please enter your username.");
-            }
-        }
-
-        // Event handler for receiving messages
         connection.on("ReceiveMessage", (user, message) => {
             const messageContainer = document.getElementById("message-container");
             messageContainer.innerHTML += `<p><strong>${user}:</strong> ${message}</p>`;
             messageContainer.scrollTop = messageContainer.scrollHeight;
         });
+
+        function sendMessage() {
+            const groupName = "YourGroupName"; // Specify your group name here
+            const user = "YourUsername"; // Specify your username here
+            const messageInput = document.getElementById("message-input");
+            const message = messageInput.value.trim();
+            if (message) {
+                connection.invoke("SendMessageToGroup", groupName, user, message)
+                    .catch(err => {
+                        console.log("Error sending message:");
+                    });
+                messageInput.value = "";
+            }
+        }
     </script>
 </body>
-</html>
+</html> 
