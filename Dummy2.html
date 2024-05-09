@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalRClient</title>
+</head>
+<body>
+    <h2>Data loaded from the Web API:</h2>
+    <div id="offersContainer" class="alert alert-warning" role="alert"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+    <script>
+        const offersContainer = document.getElementById('offersContainer');
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl('https://localhost:44381/conversations')
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        hubConnection.start()
+            .then(() => console.log('Connection started.......!'))
+            .catch(err => console.log('Error while connecting to server:'));
+
+        hubConnection.on('SendOffersToUser', (conversations) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = 'Offers: ' + conversations;
+            offersContainer.appendChild(listItem);
+        });
+    </script>
+</body>
+</html>
