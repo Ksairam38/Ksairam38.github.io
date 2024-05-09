@@ -23,6 +23,7 @@
 
         hubConnection.on('SendOffersToUser', (conversations) => {
             const listItem = document.createElement('li');
+            console.log(conversations);
             listItem.textContent = 'Offers: ' + conversations;
             offersContainer.appendChild(listItem);
         });
