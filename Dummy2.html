@@ -15,13 +15,7 @@
       // Example data to be sent to the server
     
       const hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl("https://localhost:44381/conversations", {
-          transport: signalR.HttpTransportType.WebSockets,
-        
-          accessTokenFactory: () => null, // Required for WebSockets transport
-        })
-        .withHubProtocol(new signalR.protocols.JsonHubProtocol())
-        .configureLogging(signalR.LogLevel.Information)
+        .withUrl("https://localhost:44381/conversations"
         .build();
 
       let offersReceiveHandler;
