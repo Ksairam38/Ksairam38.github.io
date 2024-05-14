@@ -1,62 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SignalRClient</title>
-  </head>
-  <body>
-    <h2>Data loaded from the Web API:</h2>
-    <div id="offersContainer" class="alert alert-warning" role="alert"></div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
-    <script>
-      const offersContainer = document.getElementById("offersContainer");
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SignalRClient</title>
+</head>
+<body>
+  <h2>Data loaded from the Web API:</h2>
+  <div id="offersContainer" class="alert alert-warning" role="alert"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+  <script>
+    const offersContainer = document.getElementById("offersContainer");
 
-      // Example data to be sent to the server
-    
-      const hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl("https://localhost:44381/conversations"
-        .build();
+    // Example data to be sent to the server
 
-      let offersReceiveHandler;
+    const hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl("https://localhost:44381/conversations")
+      .build();
 
-      offersReceiveHandler = (conversations) => {
-        const listItem = document.createElement("li");
-        console.log(conversations);
-        if (conversations) {
-          listItem.textContent = "Offers: " + conversations;
-        } else {
-          listItem.textContent = "No offers received.";
-        }
-        offersContainer.appendChild(listItem);
-      };
-
-      hubConnection.on("SendOffersToUser", offersReceiveHandler);
-
-      hubConnection
-        .start(userData)
-        .then(() => console.log("Connection started.......!"))
-        .catch((err) => {
-          console.error("Error while connecting to server:", err);
-          // Display a user-friendly message or take appropriate action
-        });
-
-      // Example function to disconnect and reconnect
-      function reconnect() {
-        hubConnection.off("SendOffersToUser", offersReceiveHandler);
-        hubConnection.stop()
-          .then(() => {
-            console.log("Disconnected from server.");
-            // Clear the offersContainer or perform any necessary cleanup
-            offersContainer.innerHTML = "";
-            hubConnection.on("SendOffersToUser", offersReceiveHandler);
-            hubConnection
-              .start(userData)
-              .then(() => console.log("Reconnected to server."))
-              .catch((err) => console.error("Error while reconnecting:", err));
-          })
-          .catch((err) => console.error("Error while disconnecting:", err));
-      }
-    </script>
-  </body>
+    hubConnection.start()
+      .then(() => console.log("Connection started!")) // Success message
+      .catch((err) => {
+        console.error("Error while connecting to server:", err);
+        // Display a user-friendly message or take appropriate action
+      });
+  </script>
+</body>
 </html>
