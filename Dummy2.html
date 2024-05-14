@@ -16,9 +16,7 @@
       const userData = {
         businessId: "your-business-id",
         userId: "your-user-id",
-        operations: {
-          // ... additional operations data
-        },
+        operations: {},
       };
 
       const hubConnection = new signalR.HubConnectionBuilder()
@@ -34,17 +32,45 @@
         .configureLogging(signalR.LogLevel.Information)
         .build();
 
-      hubConnection.on("SendOffersToUser", (conversations) => {
+      let offersReceiveHandler;
+
+      offersReceiveHandler = (conversations) => {
         const listItem = document.createElement("li");
         console.log(conversations);
-        listItem.textContent = "Offers: " + conversations;
+        if (conversations) {
+          listItem.textContent = "Offers: " + conversations;
+        } else {
+          listItem.textContent = "No offers received.";
+        }
         offersContainer.appendChild(listItem);
-      });
+      };
+
+      hubConnection.on("SendOffersToUser", offersReceiveHandler);
 
       hubConnection
         .start(userData)
         .then(() => console.log("Connection started.......!"))
-        .catch((err) => console.log("Error while connecting to server:", err));
+        .catch((err) => {
+          console.error("Error while connecting to server:", err);
+          // Display a user-friendly message or take appropriate action
+        });
+
+      // Example function to disconnect and reconnect
+      function reconnect() {
+        hubConnection.off("SendOffersToUser", offersReceiveHandler);
+        hubConnection.stop()
+          .then(() => {
+            console.log("Disconnected from server.");
+            // Clear the offersContainer or perform any necessary cleanup
+            offersContainer.innerHTML = "";
+            hubConnection.on("SendOffersToUser", offersReceiveHandler);
+            hubConnection
+              .start(userData)
+              .then(() => console.log("Reconnected to server."))
+              .catch((err) => console.error("Error while reconnecting:", err));
+          })
+          .catch((err) => console.error("Error while disconnecting:", err));
+      }
     </script>
   </body>
 </html>
