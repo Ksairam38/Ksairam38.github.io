@@ -67,7 +67,7 @@
         }
 
         const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("https://webhooks.engageto.com/conversations")
+            .withUrl("https://localhost:44381/conversations")
             .build();
 
         hubConnection.start()
@@ -82,6 +82,16 @@
             
         hubConnection.on("SendContacts", (data) => {
             console.log(data);
+           
+            // Loop through the received data and generate HTML for each contact
+            data.forEach(contact => {
+                const contactHTML = generateContactHTML(conversation);
+                conversationsContainer.insertAdjacentHTML("beforeend", contactHTML);
+            });
+            // Handle received data here, for example, update UI with the received data
+        });
+ hubConnection.on("SendConversations", (data) => {
+            console.log(data);
             contactsContainer.innerHTML = "";
             // Loop through the received data and generate HTML for each contact
             data.forEach(contact => {
@@ -90,7 +100,6 @@
             });
             // Handle received data here, for example, update UI with the received data
         });
-
         // Function to load conversation for a contact
         function loadConversation(contact, businessId) {
             console.log(`Loading conversation for contact: ${contact}`);
