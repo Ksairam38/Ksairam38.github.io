@@ -13,19 +13,11 @@
       const offersContainer = document.getElementById("offersContainer");
 
       // Example data to be sent to the server
-      const userData = {
-        businessId: "your-business-id",
-        userId: "your-user-id",
-        operations: {},
-      };
-
+    
       const hubConnection = new signalR.HubConnectionBuilder()
         .withUrl("https://localhost:44381/conversations", {
           transport: signalR.HttpTransportType.WebSockets,
-          httpProtocolOptions: {
-            transferMode: signalR.TransferMode.Binary,
-            skipNegotiation: true,
-          },
+        
           accessTokenFactory: () => null, // Required for WebSockets transport
         })
         .withHubProtocol(new signalR.protocols.JsonHubProtocol())
