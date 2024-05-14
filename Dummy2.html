@@ -65,11 +65,12 @@
                 </div>
             `;
         }
-  function generateConversationsHTML(conversation) {
+        
+        // Function to generate HTML for a single conversation
+        function generateConversationsHTML(conversation) {
             return `
-                <div >
-                    <p> ${contact.TextMessage}</p>
-                    
+                <div class="conversation">
+                    <p> ${conversation.TextMessage}</p>
                 </div>
             `;
         }
@@ -90,7 +91,7 @@
             
         hubConnection.on("SendContacts", (data) => {
             console.log(data);
-           contactsContainer.innerHTML = "";
+            contactsContainer.innerHTML = "";
             // Loop through the received data and generate HTML for each contact
             data.forEach(contact => {
                 const contactHTML = generateContactHTML(contact);
@@ -99,25 +100,23 @@
             // Handle received data here, for example, update UI with the received data
         });
         
- hubConnection.on("SendConversations", (data) => {
+        hubConnection.on("SendConversations", (data) => {
             console.log(data);
             conversationsContainer.innerHTML = "";
-            // Loop through the received data and generate HTML for each contact
-            data.forEach(contact => {
-                const contactHTML = generateConversationsHTML(conversation);
-                conversationsContainer.insertAdjacentHTML("beforeend", contactHTML);
+            // Loop through the received data and generate HTML for each conversation
+            data.forEach(conversation => {
+                const conversationHTML = generateConversationsHTML(conversation);
+                conversationsContainer.insertAdjacentHTML("beforeend", conversationHTML);
             });
             // Handle received data here, for example, update UI with the received data
         });
-        hubConnection.on("SendConversations", (data) => {
+
+        hubConnection.on("ReceiveMessageFromServer", (data) => {
             console.log(data);
             conversationsContainer.innerHTML += data;
-            // Loop through the received data and generate HTML for each contact
-           
-                conversationsContainer.insertAdjacentHTML("beforeend", contactHTML);
-            
             // Handle received data here, for example, update UI with the received data
         });
+        
         // Function to load conversation for a contact
         function loadConversation(contact, businessId) {
             console.log(`Loading conversation for contact: ${contact}`);
