@@ -14,7 +14,7 @@
     const userData = {
       businessId: "99969011-7b1d-4c2d-92a6-fba9ca31a261",
       userId: "087d89ca-2d1e-4edf-b849-772b811daa25",
-    operations:{}
+      operations: {}
     };
 
     const hubConnection = new signalR.HubConnectionBuilder()
@@ -27,13 +27,14 @@
         // Send the userData object to the server after connection is established
         hubConnection.invoke("SendUserData", userData);
       })
-    
-     .catch((err) => {
-  console.error("Connection failed:", err);
+      .catch((err) => {
+        console.error("Connection failed:", err);
       });
-    hubconnection.on(data){
+      
+    hubConnection.on("ReceiveData", (data) => {
       console.log(data);
-    };
+      // Handle received data here, for example, update UI with the received data
+    });
   </script>
 </body>
 </html>
