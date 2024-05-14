@@ -100,7 +100,7 @@
                     conversationsContainer.innerHTML = `<div class="conversation">${conversation}</div>`;
                 })
                 .catch(error => {
-                    console.error(`Error loading conversation for contact ${contact}:`, error);
+                    console.log(`Error loading conversation for contact ${contact}:`);
                 });
         }
     </script>
