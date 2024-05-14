@@ -5,21 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SignalRClient</title>
     <style>
-        .contact-button {
-            display: inline-block;
-            background-color: #007bff;
-            color: #fff;
-            padding: 8px 16px;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 4px;
+        .inbox-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .contact-container {
+            width: 30%;
+            margin-right: 20px;
+        }
+        .conversation-container {
+            width: 60%;
+        }
+        .contact {
             cursor: pointer;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .contact:hover {
+            background-color: #eaeaea;
+        }
+        .conversation {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
         }
     </style>
 </head>
 <body>
     <h2>Data loaded from the Web API:</h2>
-    <div id="inboxList"></div>
+    <div class="inbox-container">
+        <div id="contactsContainer" class="contact-container"></div>
+        <div id="conversationsContainer" class="conversation-container"></div>
+    </div>
 
     <div id="offersContainer" class="alert alert-warning" role="alert"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
@@ -30,19 +51,18 @@
             userId: "087d89ca-2d1e-4edf-b849-772b811daa25",
             operations: {}
         };
-        const inboxList = document.getElementById("inboxList");
+        const contactsContainer = document.getElementById("contactsContainer");
+        const conversationsContainer = document.getElementById("conversationsContainer");
 
         // Function to generate HTML for a single contact
         function generateContactHTML(contact) {
             return `
-            <a href="#" class="contact-button" onclick="joinGroup('${contact.contact}', '${userData.businessId}')">
-                <div class="contact">
+                <div class="contact" onclick="loadConversation('${contact.contact}')">
                     <p>Contact: ${contact.contact}</p>
                     <p>Name: ${contact.name}</p>
                     <p>Chat Status: ${contact.chatStatus}</p>
                     <p>Assignee: ${contact.assignee}</p>
                 </div>
-            </a>
             `;
         }
 
@@ -62,22 +82,25 @@
             
         hubConnection.on("SendContacts", (data) => {
             console.log(data);
-            inboxList.innerHTML = "";
+            contactsContainer.innerHTML = "";
             // Loop through the received data and generate HTML for each contact
             data.forEach(contact => {
                 const contactHTML = generateContactHTML(contact);
-                inboxList.insertAdjacentHTML("beforeend", contactHTML);
+                contactsContainer.insertAdjacentHTML("beforeend", contactHTML);
             });
             // Handle received data here, for example, update UI with the received data
         });
 
-        // Function to join a group
-        function joinGroup(contact, businessId) {
-            console.log(`Joining group for contact: ${contact}, Business ID: ${businessId}`);
-            // Call the server method to join the group
-            hubConnection.invoke("JoinGroup", contact, businessId)
+        // Function to load conversation for a contact
+        function loadConversation(contact) {
+            console.log(`Loading conversation for contact: ${contact}`);
+            // Call the server method to get conversation for the contact
+            hubConnection.invoke("JoinGroup",contact,businessId )
+                .then(conversation => {
+                    conversationsContainer.innerHTML = `<div class="conversation">${conversation}</div>`;
+                })
                 .catch(error => {
-                    console.log(`Error joining group for contact ${contact}:`);
+                    console.error(`Error loading conversation for contact ${contact}:`, error);
                 });
         }
     </script>
