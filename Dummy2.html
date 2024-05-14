@@ -28,7 +28,8 @@
         hubConnection.invoke("SendUserData", userData);
       })
       .catch((err) => {
-      console.log("Connection failed....!");
+     .catch((err) => {
+  console.error("Connection failed:", err);
       });
   </script>
 </body>
