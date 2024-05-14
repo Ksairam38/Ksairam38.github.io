@@ -31,7 +31,7 @@
         console.error("Connection failed:", err);
       });
       
-    hubConnection.on("ReceiveData", (data) => {
+    hubConnection.on("SendData", (data) => {
       console.log(data);
       // Handle received data here, for example, update UI with the received data
     });
