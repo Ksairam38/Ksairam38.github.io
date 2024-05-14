@@ -1,60 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SignalRClient</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SignalRClient</title>
 </head>
 <body>
-  <h2>Data loaded from the Web API:</h2>
-  <div id="inboxList"></div>
+    <h2>Data loaded from the Web API:</h2>
+    <div id="inboxList"></div>
 
-  <div id="offersContainer" class="alert alert-warning" role="alert"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
-  <script>
-    const offersContainer = document.getElementById("offersContainer");
-    const userData = {
-      businessId: "99969011-7b1d-4c2d-92a6-fba9ca31a261",
-      userId: "087d89ca-2d1e-4edf-b849-772b811daa25",
-      operations: {}
-    };
-    const inboxList = document.getElementById("inboxList");
+    <div id="offersContainer" class="alert alert-warning" role="alert"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
+    <script>
+        const offersContainer = document.getElementById("offersContainer");
+        const userData = {
+            businessId: "99969011-7b1d-4c2d-92a6-fba9ca31a261",
+            userId: "087d89ca-2d1e-4edf-b849-772b811daa25",
+            operations: {}
+        };
+        const inboxList = document.getElementById("inboxList");
 
-    // Function to generate HTML for a single contact
-    function generateContactHTML(contact) {
-      return `
-        <div class="contact">
-          <p>Contact: ${contact.contact}</p>
-          <p>Name: ${contact.name}</p>
-          <p>Chat Status: ${contact.chatStatus}</p>
-          <p>Assignee: ${contact.assignee}</p>
-        </div>
-      `;
-    }
-    const hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl("https://webhooks.engageto.com/conversations")
-      .build();
+        // Function to generate HTML for a single contact
+        function generateContactHTML(contact) {
+            return `
+            <div class="contact">
+                <p>Contact: ${contact.contact}</p>
+                <p>Name: ${contact.name}</p>
+                <p>Chat Status: ${contact.chatStatus}</p>
+                <p>Assignee: ${contact.assignee}</p>
+                <button onclick="joinGroup('${contact.contact}', '${userData.businessId}')">Join Group</button>
+            </div>
+            `;
+        }
 
-    hubConnection.start()
-      .then(() => {
-        console.log("Connection started!");
-        // Send the userData object to the server after connection is established
-        hubConnection.invoke("SendUserData", userData);
-      })
-      .catch((err) => {
-        console.error("Connection failed:", err);
-      });
-      
-    hubConnection.on("SendContacts", (data) => {
-      console.log(data);
-      inboxList.innerHTML = "";
-      // Loop through the received data and generate HTML for each contact
-      data.forEach(contact => {
-        const contactHTML = generateContactHTML(contact); // Fixed 'data' to 'contact'
-        inboxList.insertAdjacentHTML("beforeend", contactHTML);
-      });
-      // Handle received data here, for example, update UI with the received data
-    });
-  </script>
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("https://webhooks.engageto.com/conversations")
+            .build();
+
+        hubConnection.start()
+            .then(() => {
+                console.log("Connection started!");
+                // Send the userData object to the server after connection is established
+                hubConnection.invoke("SendUserData", userData);
+            })
+            .catch((err) => {
+                console.error("Connection failed:", err);
+            });
+            
+        hubConnection.on("SendContacts", (data) => {
+            console.log(data);
+            inboxList.innerHTML = "";
+            // Loop through the received data and generate HTML for each contact
+            data.forEach(contact => {
+                const contactHTML = generateContactHTML(contact);
+                inboxList.insertAdjacentHTML("beforeend", contactHTML);
+            });
+            // Handle received data here, for example, update UI with the received data
+        });
+
+        // Function to join a group
+        function joinGroup(contact, businessId) {
+            console.log(`Joining group for contact: ${contact}, Business ID: ${businessId}`);
+            // Call the server method to join the group
+            hubConnection.invoke("JoinGroup", contact, businessId)
+                .catch(error => {
+                    console.error(`Error joining group for contact ${contact}:`, error);
+                });
+        }
+    </script>
 </body>
 </html>
