@@ -27,7 +27,7 @@
         // Send the userData object to the server after connection is established
         hubConnection.invoke("SendUserData", userData);
       })
-      .catch((err) => {
+    
      .catch((err) => {
   console.error("Connection failed:", err);
       });
