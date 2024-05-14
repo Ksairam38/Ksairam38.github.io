@@ -98,12 +98,7 @@
             hubConnection.invoke("JoinGroup", contact, businessId)
                 .then(() => {
                     // Group joined successfully, now get conversation
-                    hubConnection.invoke("SendConversation", contact)
-                        .then(conversation => {
-                            conversationsContainer.innerHTML = `<div class="conversation">${conversation}</div>`;
-                        })
-                        .catch(error => {
-                            console.error(`Error loading conversation for contact ${contact}:`, error);
+                  
                         });
                 })
                 .catch(error => {
