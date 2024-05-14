@@ -76,8 +76,8 @@
                 // Send the userData object to the server after connection is established
                 hubConnection.invoke("SendUserData", userData);
             })
-            .catch((err) => {
-                console.log("Connection failed:");
+            .catch(() => {
+                console.log("Connection failed");
             });
             
         hubConnection.on("SendContacts", (data) => {
@@ -96,13 +96,8 @@
             console.log(`Loading conversation for contact: ${contact}`);
             // Call the server method to join the group with the contact
             hubConnection.invoke("JoinGroup", contact, businessId)
-                .then(() => {
-                    // Group joined successfully, now get conversation
-                  
-                        });
-                })
-                .catch(error => {
-                    console.log(`Error joining group for contact ${contact}:`);
+                .catch(() => {
+                    console.log(`Error joining group for contact ${contact}`);
                 });
         }
     </script>
