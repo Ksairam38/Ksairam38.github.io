@@ -57,7 +57,7 @@
         // Function to generate HTML for a single contact
         function generateContactHTML(contact) {
             return `
-                <div class="contact" onclick="loadConversation('${contact.contact}')">
+                <div class="contact" onclick="loadConversation('${contact.contact}', '${userData.businessId}')">
                     <p>Contact: ${contact.contact}</p>
                     <p>Name: ${contact.name}</p>
                     <p>Chat Status: ${contact.chatStatus}</p>
@@ -92,15 +92,22 @@
         });
 
         // Function to load conversation for a contact
-        function loadConversation(contact) {
+        function loadConversation(contact, businessId) {
             console.log(`Loading conversation for contact: ${contact}`);
-            // Call the server method to get conversation for the contact
-            hubConnection.invoke("JoinGroup",contact,businessId )
-                .then(conversation => {
-                    conversationsContainer.innerHTML = `<div class="conversation">${conversation}</div>`;
+            // Call the server method to join the group with the contact
+            hubConnection.invoke("JoinGroup", contact, businessId)
+                .then(() => {
+                    // Group joined successfully, now get conversation
+                    hubConnection.invoke("SendConversation", contact)
+                        .then(conversation => {
+                            conversationsContainer.innerHTML = `<div class="conversation">${conversation}</div>`;
+                        })
+                        .catch(error => {
+                            console.error(`Error loading conversation for contact ${contact}:`, error);
+                        });
                 })
                 .catch(error => {
-                    console.log(`Error loading conversation for contact ${contact}:`);
+                    console.error(`Error joining group for contact ${contact}:`, error);
                 });
         }
     </script>
