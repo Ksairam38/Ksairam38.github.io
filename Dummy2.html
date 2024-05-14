@@ -7,6 +7,8 @@
 </head>
 <body>
   <h2>Data loaded from the Web API:</h2>
+    <div id="inboxList"></div>
+
   <div id="offersContainer" class="alert alert-warning" role="alert"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
   <script>
@@ -16,7 +18,19 @@
       userId: "087d89ca-2d1e-4edf-b849-772b811daa25",
       operations: {}
     };
+ const inboxList = document.getElementById("inboxList");
 
+    // Function to generate HTML for a single contact
+    function generateContactHTML(contact) {
+      return `
+        <div class="contact">
+          <p>Contact: ${contact.contact}</p>
+          <p>Name: ${contact.name}</p>
+          <p>Chat Status: ${contact.chatStatus}</p>
+          <p>Assignee: ${contact.assignee}</p>
+        </div>
+      `;
+    }
     const hubConnection = new signalR.HubConnectionBuilder()
       .withUrl("https://localhost:44381/conversations")
       .build();
@@ -33,6 +47,12 @@
       
     hubConnection.on("SendContacts", (data) => {
       console.log(data);
+      inboxList.innerHTML = "";
+      // Loop through the received data and generate HTML for each contact
+      data.forEach(contact => {
+        const contactHTML = generateContactHTML(data);
+        inboxList.insertAdjacentHTML("beforeend", contactHTML);
+      });
       // Handle received data here, for example, update UI with the received data
     });
   </script>
