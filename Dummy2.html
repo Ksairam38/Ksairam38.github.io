@@ -67,7 +67,7 @@
         }
 
         const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:44381/conversations")
+            .withUrl("https://webhooks.engageto.com/conversations")
             .build();
 
         hubConnection.start()
