@@ -65,9 +65,17 @@
                 </div>
             `;
         }
+  function generateConversationsHTML(conversation) {
+            return `
+                <div >
+                    <p> ${contact.TextMessage}</p>
+                    
+                </div>
+            `;
+        }
 
         const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("https://webhooks.engageto.com/conversations")
+            .withUrl("https://localhost:44381/conversations")
             .build();
 
         hubConnection.start()
@@ -90,14 +98,24 @@
             });
             // Handle received data here, for example, update UI with the received data
         });
+        
  hubConnection.on("SendConversations", (data) => {
             console.log(data);
             conversationsContainer.innerHTML = "";
             // Loop through the received data and generate HTML for each contact
             data.forEach(contact => {
-                const contactHTML = generateContactHTML(conversation);
+                const contactHTML = generateConversationsHTML(conversation);
                 conversationsContainer.insertAdjacentHTML("beforeend", contactHTML);
             });
+            // Handle received data here, for example, update UI with the received data
+        });
+        hubConnection.on("SendConversations", (data) => {
+            console.log(data);
+            conversationsContainer.innerHTML += data;
+            // Loop through the received data and generate HTML for each contact
+           
+                conversationsContainer.insertAdjacentHTML("beforeend", contactHTML);
+            
             // Handle received data here, for example, update UI with the received data
         });
         // Function to load conversation for a contact
