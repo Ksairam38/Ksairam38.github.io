@@ -121,17 +121,13 @@
         function loadConversation(contact, businessId) {
             console.log(`Loading conversation for contact: ${contact}`);
             // Call the server method to leave all existing groups
-            hubConnection.invoke("LeaveAllGroups")
-                .then(() => {
+           
                     // Successfully left all groups, now join the group with the specified contact
                     hubConnection.invoke("JoinGroup", contact, businessId)
                         .catch(() => {
                             console.log(`Error joining group for contact ${contact}`);
                         });
-                })
-                .catch(() => {
-                    console.log("Error leaving groups");
-                });
+               
         }
     </script>
 </body>
