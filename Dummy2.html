@@ -118,18 +118,26 @@
         });
         
         // Function to load conversation for a contact
-        function loadConversation(contact, businessId) {
-            console.log(`Loading conversation for contact: ${contact}`);
-            // Call the server method to leave all existing groups
-              hubConnection.invoke("LeaveGroup")
-                        .catch(() => {
-                            console.log(`Error joining group for contact ${contact}`);
-                        });
-                    // Successfully left all groups, now join the group with the specified contact
-                    hubConnection.invoke("JoinGroup", contact, businessId)
-                        .catch(() => {
-                            console.log(`Error joining group for contact ${contact}`);
-                        });
+      function loadConversation(contact, businessId) {
+    console.log(`Loading conversation for contact: ${contact}`);
+    
+    // Call the server method to leave all existing groups
+    hubConnection.invoke("LeaveGroup")
+        .then(() => {
+            console.log(`Successfully left all groups.`);
+            
+            // Now join the group with the specified contact
+            hubConnection.invoke("JoinGroup", contact, businessId)
+                .then(() => {
+                    console.log(`Successfully joined group for contact ${contact}`);
+                })
+                .catch((error) => {
+                    console.error(`Error joining group for contact ${contact}:`, error);
+                });
+        })
+        .catch((error) => {
+            console.error(`Error leaving groups:`, error);
+        });
                
         }
     </script>
