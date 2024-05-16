@@ -166,10 +166,11 @@
     }
 
     // Function to send media message
-    function sendMediaMessage() {
-        const mediaFile = document.getElementById("mediaFile").files[0];
-        const mediaCaption = document.getElementById("mediaCaption").value;
-     const reader = new FileReader();
+   // Function to send media message
+function sendMediaMessage() {
+    const mediaFile = document.getElementById("mediaFile").files[0];
+    const mediaCaption = document.getElementById("mediaCaption").value;
+    const reader = new FileReader();
     reader.onload = function () {
         const base64File = reader.result.split(",")[1]; // Extracting base64 data from result
         const rt = {
@@ -183,7 +184,9 @@
                 console.log("Media message sent successfully.");
                 // Optionally, update UI or display a success message
             });
-    }
+    }; // Closing brace for the reader.onload function
+} // Closing brace for the sendMediaMessage function
+
     </script>
 </body>
 </html>
