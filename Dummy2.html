@@ -169,12 +169,38 @@
     function sendMediaMessage() {
         const mediaFile = document.getElementById("mediaFile").files[0];
         const mediaCaption = document.getElementById("mediaCaption").value;
-      
+      const iformFile = {
+    ContentType: mediaFile.type,
+    ContentDisposition: `form-data; name="File"; filename="${mediaFile.name}"`,
+    Headers: {},
+    Length: mediaFile.size,
+    Name: "File",
+    FileName: mediaFile.name,
+    OpenReadStream: () => mediaFile,
+    CopyTo: (target) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const arrayBuffer = reader.result;
+            const uint8Array = new Uint8Array(arrayBuffer);
+            const blob = new Blob([uint8Array], { type: mediaFile.type });
+            const blobStream = blob.stream();
+            blobStream.pipeTo(target);
+        };
+        reader.readAsArrayBuffer(mediaFile);
+    },
+    CopyToAsync: async (target) => {
+        const arrayBuffer = await mediaFile.arrayBuffer();
+        const uint8Array = new Uint8Array(arrayBuffer);
+        const blob = new Blob([uint8Array], { type: mediaFile.type });
+        const blobStream = blob.stream();
+        await blobStream.pipeTo(target);
+    }
+};
 
     // Create a FormData object to send file data
     const rt = {
             Contact: ["919848732198"], // List of contacts (replace with actual contacts)
-            File: mediaFile,caption:""
+            File: iformFile,caption:""
         };
         hubConnection.invoke("SendMediaMessage", rt, userData.businessId)
             .then(() => {
