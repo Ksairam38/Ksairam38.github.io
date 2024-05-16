@@ -179,7 +179,7 @@ function sendMediaMessage() {
             Caption: mediaCaption,
             FileName: mediaFile.name
         };
-        hubConnection.invoke("SendMediaMessage")
+        hubConnection.invoke("SendMediaMessage",userData.businessId)
             .then(() => {
                 console.log("Media message sent successfully.");
                 // Optionally, update UI or display a success message
