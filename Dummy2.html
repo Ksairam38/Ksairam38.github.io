@@ -146,52 +146,41 @@
             hubConnection.invoke("JoinGroup", contact, businessId)
                 .then(() => {
                     console.log(`Successfully joined group for contact ${contact}`);
-                })
-                .catch((error) => {
-                    console.error(`Error joining group for contact ${contact}:`, error);
                 });
-        })
-        .catch((error) => {
-            console.error(`Error leaving groups:`, error);
         });
-               function sendTextMessage() {
-            const textMessage = document.getElementById("textMessage").value;
-            const data = {
-                Contact: ["919848732198"], // List of contacts (replace with actual contacts)
-                TextMessage: textMessage
-            };
-            
-            hubConnection.invoke("SendTextOrEmojiMessage", data, userData.businessId)
-                .then(() => {
-                    console.log("Text message sent successfully.");
-                    // Optionally, update UI or display a success message
-                })
-                .catch((error) => {
-                    console.error("Error sending text message:", error);
-                    // Optionally, display an error message
-                });
-        }
+    }
 
-        // Function to send media message
-        function sendMediaMessage() {
-            const mediaFile = document.getElementById("mediaFile").files[0];
-            const mediaCaption = document.getElementById("mediaCaption").value;
-            const data = {
-                Contact: ["919848732198"], // List of contacts (replace with actual contacts)
-                File: mediaFile,
-                Caption: mediaCaption
-            };
-            
-            hubConnection.invoke("SendMediaMessage", data, userData.businessId)
-                .then(() => {
-                    console.log("Media message sent successfully.");
-                    // Optionally, update UI or display a success message
-                })
-                .catch((error) => {
-                    console.error("Error sending media message:", error);
-                    // Optionally, display an error message
-                }); 
-        }
+    // Function to send text message
+    function sendTextMessage() {
+        const textMessage = document.getElementById("textMessage").value;
+        const data = {
+            Contact: ["919848732198"], // List of contacts (replace with actual contacts)
+            TextMessage: textMessage
+        };
+
+        hubConnection.invoke("SendTextOrEmojiMessage", data, userData.businessId)
+            .then(() => {
+                console.log("Text message sent successfully.");
+                // Optionally, update UI or display a success message
+            });
+    }
+
+    // Function to send media message
+    function sendMediaMessage() {
+        const mediaFile = document.getElementById("mediaFile").files[0];
+        const mediaCaption = document.getElementById("mediaCaption").value;
+        const data = {
+            Contact: ["919848732198"], // List of contacts (replace with actual contacts)
+            File: mediaFile,
+            Caption: mediaCaption
+        };
+
+        hubConnection.invoke("SendMediaMessage", data, userData.businessId)
+            .then(() => {
+                console.log("Media message sent successfully.");
+                // Optionally, update UI or display a success message
+            });
+    }
     </script>
 </body>
 </html>
