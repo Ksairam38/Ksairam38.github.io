@@ -174,7 +174,7 @@ function sendMediaMessage() {
     reader.onload = function () {
         const base64File = reader.result.split(",")[1]; // Extracting base64 data from result
         const rt = {
-            Contact: ["919848732198"], // List of contacts (replace with actual contacts)
+          // List of contacts (replace with actual contacts)
             Base64File: base64File,
             Caption: mediaCaption,
             FileName: mediaFile.name
