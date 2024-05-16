@@ -170,16 +170,11 @@ function sendMediaMessage() {
     const mediaFile = document.getElementById("mediaFile").files[0];
     const mediaCaption = document.getElementById("mediaCaption").value;
     const reader = new FileReader();
-    
+      const   Contact=  ["919848732198"];
     reader.onload = function () {
         const base64File = reader.result.split(",")[1]; // Extracting base64 data from result
-        const media = {
-          // List of contacts (replace with actual contacts)
-            Base64File: base64File,
-            Caption: mediaCaption,
-            FileName: mediaFile.name
-        };
-        hubConnection.invoke("SendMediaMessage",media,userData.businessId)
+      
+        hubConnection.invoke("SendMediaMessage",Contact,base64File,mediaCaption,FileName: mediaFile.name,userData.businessId)
             .then(() => {
                 console.log("Media message sent successfully.");
                 // Optionally, update UI or display a success message
