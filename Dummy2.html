@@ -169,20 +169,14 @@
     function sendMediaMessage() {
         const mediaFile = document.getElementById("mediaFile").files[0];
         const mediaCaption = document.getElementById("mediaCaption").value;
-     const iformFile = {
-    ContentType: mediaFile.type,
-    ContentDisposition: `form-data; name="File"; filename="${mediaFile.name}"`,
-    Headers: {},
-    Length: mediaFile.size,
-    Name: "File",
-    FileName: mediaFile.name,
-    FileObject: mediaFile // Directly referencing the file object
-};
-
-    // Create a FormData object to send file data
-    const rt = {
+     const reader = new FileReader();
+    reader.onload = function () {
+        const base64File = reader.result.split(",")[1]; // Extracting base64 data from result
+        const rt = {
             Contact: ["919848732198"], // List of contacts (replace with actual contacts)
-            File: iformFile,caption:""
+            Base64File: base64File,
+            Caption: mediaCaption,
+            FileName: mediaFile.name
         };
         hubConnection.invoke("SendMediaMessage", rt, userData.businessId)
             .then(() => {
