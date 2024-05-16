@@ -42,13 +42,12 @@
         <div id="conversationsContainer" class="conversation-container"></div>
     </div>
 
-    <div id="offersContainer" class="alert alert-warning" role="alert"></div>
 
     <div>
         <h3>Send Text Message</h3>
         <div>
             <input type="text" id="textMessage" placeholder="Enter text message" />
-            <button onclick="sendMessage('text')">Send Text Message</button>
+            <button onclick="sendTextMessage()">Send Text Message</button>
         </div>
     </div>
     <div>
@@ -56,40 +55,142 @@
         <div>
             <input type="file" id="mediaFile" accept=".jpg, .jpeg, .png, .gif" />
             <input type="text" id="mediaCaption" placeholder="Enter caption" />
-            <button onclick="sendMessage('media')">Send Media Message</button>
+            <button onclick="sendMediaMessage()">Send Media Message</button>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
     <script>
-        // Your existing JavaScript code here...
+   
+        const userData = {
+            businessId: "99969011-7b1d-4c2d-92a6-fba9ca31a261",
+            userId: "087d89ca-2d1e-4edf-b849-772b811daa25",
+            operations: {}
+        };
+        const contactsContainer = document.getElementById("contactsContainer");
+        const conversationsContainer = document.getElementById("conversationsContainer");
 
-        function sendMessage(type) {
-            let messageData = {};
-            if (type === 'text') {
-                messageData = {
-                    Contact: ["contact1", "contact2"], // List of contacts (replace with actual contacts)
-                    TextMessage: document.getElementById("textMessage").value
-                };
-            } else if (type === 'media') {
-                messageData = {
-                    Contact: ["contact1", "contact2"], // List of contacts (replace with actual contacts)
-                    File: document.getElementById("mediaFile").files[0],
-                    Caption: document.getElementById("mediaCaption").value
-                };
-            }
+        // Function to generate HTML for a single contact
+        function generateContactHTML(contact) {
+            return `
+                <div class="contact" onclick="loadConversation('${contact.contact}', '${userData.businessId}')">
+                    <p>Contact: ${contact.contact}</p>
+                    <p>Name: ${contact.name}</p>
+                    <p>Chat Status: ${contact.chatStatus}</p>
+                    <p>Assignee: ${contact.assignee}</p>
+                </div>
+            `;
+        }
+        
+        // Function to generate HTML for a single conversation
+        function generateConversationsHTML(conversation) {
+            return `
+                <div class="conversation">
+                    <p> ${conversation.TextMessage}</p>
+                </div>
+            `;
+        }
 
-            const methodName = type === 'text' ? 'SendTextOrEmojiMessage' : 'SendMediaMessage';
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl("https://webhooks.engageto.com/conversations")
+            .build();
 
-            hubConnection.invoke(methodName, messageData, userData.businessId)
+        hubConnection.start()
+            .then(() => {
+                console.log("Connection started!");
+                // Send the userData object to the server after connection is established
+                hubConnection.invoke("SendUserData", userData);
+            })
+            .catch(() => {
+                console.log("Connection failed");
+            });
+            
+        hubConnection.on("SendContacts", (data) => {
+            console.log(data);
+            contactsContainer.innerHTML = "";
+            // Loop through the received data and generate HTML for each contact
+            data.forEach(contact => {
+                const contactHTML = generateContactHTML(contact);
+                contactsContainer.insertAdjacentHTML("beforeend", contactHTML);
+            });
+            // Handle received data here, for example, update UI with the received data
+        });
+        
+        hubConnection.on("SendConversations", (data) => {
+            console.log(data);
+            conversationsContainer.innerHTML = "";
+            // Loop through the received data and generate HTML for each conversation
+            data.forEach(conversation => {
+                const conversationHTML = generateConversationsHTML(conversation);
+                conversationsContainer.insertAdjacentHTML("beforeend", conversationHTML);
+            });
+            // Handle received data here, for example, update UI with the received data
+        });
+
+        hubConnection.on("ReceiveMessageFromServer", (data) => {
+            console.log(data);
+            conversationsContainer.innerHTML += data;
+            // Handle received data here, for example, update UI with the received data
+        });
+        
+        // Function to load conversation for a contact
+      function loadConversation(contact, businessId) {
+    console.log(`Loading conversation for contact: ${contact}`);
+    
+    // Call the server method to leave all existing groups
+    hubConnection.invoke("LeaveGroup")
+        .then(() => {
+            console.log(`Successfully left all groups.`);
+            
+            // Now join the group with the specified contact
+            hubConnection.invoke("JoinGroup", contact, businessId)
                 .then(() => {
-                    console.log(`${type} message sent successfully.`);
+                    console.log(`Successfully joined group for contact ${contact}`);
+                })
+                .catch((error) => {
+                    console.error(`Error joining group for contact ${contact}:`, error);
+                });
+        })
+        .catch((error) => {
+            console.error(`Error leaving groups:`, error);
+        });
+               function sendTextMessage() {
+            const textMessage = document.getElementById("textMessage").value;
+            const data = {
+                Contact: ["contact1", "contact2"], // List of contacts (replace with actual contacts)
+                TextMessage: textMessage
+            };
+            
+            hubConnection.invoke("SendTextOrEmojiMessage", data, userData.businessId)
+                .then(() => {
+                    console.log("Text message sent successfully.");
                     // Optionally, update UI or display a success message
                 })
                 .catch((error) => {
-                    console.error(`Error sending ${type} message:`, error);
+                    console.error("Error sending text message:", error);
                     // Optionally, display an error message
                 });
+        }
+
+        // Function to send media message
+        function sendMediaMessage() {
+            const mediaFile = document.getElementById("mediaFile").files[0];
+            const mediaCaption = document.getElementById("mediaCaption").value;
+            const data = {
+                Contact: ["contact1", "contact2"], // List of contacts (replace with actual contacts)
+                File: mediaFile,
+                Caption: mediaCaption
+            };
+            
+            hubConnection.invoke("SendMediaMessage", data, userData.businessId)
+                .then(() => {
+                    console.log("Media message sent successfully.");
+                    // Optionally, update UI or display a success message
+                })
+                .catch((error) => {
+                    console.error("Error sending media message:", error);
+                    // Optionally, display an error message
+                }); 
         }
     </script>
 </body>
