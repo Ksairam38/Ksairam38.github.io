@@ -173,13 +173,13 @@ function sendMediaMessage() {
     
     reader.onload = function () {
         const base64File = reader.result.split(",")[1]; // Extracting base64 data from result
-        const rt = {
+        const media = {
           // List of contacts (replace with actual contacts)
             Base64File: base64File,
             Caption: mediaCaption,
             FileName: mediaFile.name
         };
-        hubConnection.invoke("SendMediaMessage",userData.businessId)
+        hubConnection.invoke("SendMediaMessage",media,userData.businessId)
             .then(() => {
                 console.log("Media message sent successfully.");
                 // Optionally, update UI or display a success message
