@@ -43,6 +43,26 @@
     </div>
 
     <div id="offersContainer" class="alert alert-warning" role="alert"></div>
+
+
+    
+    <div id="offersContainer" class="alert alert-warning" role="alert"></div>
+    <div>
+        <h3>Send Text Message</h3>
+        <div>
+            <input type="text" id="textMessage" placeholder="Enter text message" />
+            <button onclick="sendTextMessage()">Send Text Message</button>
+        </div>
+    </div>
+    <div>
+        <h3>Send Media Message</h3>
+        <div>
+            <input type="file" id="mediaFile" accept=".jpg, .jpeg, .png, .gif" />
+            <input type="text" id="mediaCaption" placeholder="Enter caption" />
+            <button onclick="sendMediaMessage()">Send Media Message</button>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
     <script>
         const offersContainer = document.getElementById("offersContainer");
@@ -138,7 +158,43 @@
         .catch((error) => {
             console.error(`Error leaving groups:`, error);
         });
-               
+               function sendTextMessage() {
+            const textMessage = document.getElementById("textMessage").value;
+            const data = {
+                Contact: ["contact1", "contact2"], // List of contacts (replace with actual contacts)
+                TextMessage: textMessage
+            };
+            
+            hubConnection.invoke("SendTextOrEmojiMessage", data, userData.businessId)
+                .then(() => {
+                    console.log("Text message sent successfully.");
+                    // Optionally, update UI or display a success message
+                })
+                .catch((error) => {
+                    console.error("Error sending text message:", error);
+                    // Optionally, display an error message
+                });
+        }
+
+        // Function to send media message
+        function sendMediaMessage() {
+            const mediaFile = document.getElementById("mediaFile").files[0];
+            const mediaCaption = document.getElementById("mediaCaption").value;
+            const data = {
+                Contact: ["contact1", "contact2"], // List of contacts (replace with actual contacts)
+                File: mediaFile,
+                Caption: mediaCaption
+            };
+            
+            hubConnection.invoke("SendMediaMessage", data, userData.businessId)
+                .then(() => {
+                    console.log("Media message sent successfully.");
+                    // Optionally, update UI or display a success message
+                })
+                .catch((error) => {
+                    console.error("Error sending media message:", error);
+                    // Optionally, display an error message
+                }); 
         }
     </script>
 </body>
