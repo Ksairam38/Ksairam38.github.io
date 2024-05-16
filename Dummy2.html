@@ -174,7 +174,7 @@ function sendMediaMessage() {
     reader.onload = function () {
         const base64File = reader.result.split(",")[1]; // Extracting base64 data from result
       
-        hubConnection.invoke("SendMediaMessage",Contact,base64File,mediaCaption,FileName: mediaFile.name,userData.businessId)
+        hubConnection.invoke("SendMediaMessage",Contact,base64File,mediaCaption,mediaFile.name,userData.businessId)
             .then(() => {
                 console.log("Media message sent successfully.");
                 // Optionally, update UI or display a success message
