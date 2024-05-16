@@ -172,11 +172,11 @@
       
 
     // Create a FormData object to send file data
-    const data = {
+    const rt = {
             Contact: ["919848732198"], // List of contacts (replace with actual contacts)
             File: mediaFile,caption:""
         };
-        hubConnection.invoke("SendMediaMessage", formData, userData.businessId)
+        hubConnection.invoke("SendMediaMessage", rt, userData.businessId)
             .then(() => {
                 console.log("Media message sent successfully.");
                 // Optionally, update UI or display a success message
