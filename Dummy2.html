@@ -170,7 +170,7 @@
 function sendMediaMessage() {
     const mediaFile = document.getElementById("mediaFile").files[0];
     const mediaCaption = document.getElementById("mediaCaption").value;
-    const reader = new FileReader();
+    const reader = new FileReader(mediaFile);
     reader.onload =  () {
         const base64File = reader.result.split(",")[1]; // Extracting base64 data from result
         const rt = {
