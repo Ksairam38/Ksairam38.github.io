@@ -133,6 +133,10 @@
             conversationsContainer.innerHTML += data;
             // Handle received data here, for example, update UI with the received data
         });
+           hubConnection.on("RenderContacts", () => {
+            hubConnection.invoke("SendUserData", userData);
+            // Handle received data here, for example, update UI with the received data
+        });
         
         // Function to load conversation for a contact
       function loadConversation(contact, businessId) {
