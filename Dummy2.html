@@ -134,7 +134,7 @@
             // Handle received data here, for example, update UI with the received data
         });
           hubConnection.on("RenderContacts", async () => {
-            await sendUserData();
+           hubConnection.invoke("SendUserData", userData);
         });
 
         
