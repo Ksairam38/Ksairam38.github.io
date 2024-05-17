@@ -93,6 +93,7 @@
 
         const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("https://webhooks.engageto.com/conversations")
+             .withAutomaticReconnect()  
             .build();
 
         hubConnection.start()
