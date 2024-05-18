@@ -132,14 +132,27 @@
         });
 
         hubConnection.on("ReceiveMessageFromServer", (data) => {
-            conversationsContainer.innerHTML += data;
-              hubConnection.invoke("SendUserData", userData);
-            connection.invoke("MarkAsRead", data.Id, userData.businessId);
-         hubConnection.invoke("SendUserData", userData);
-            // Handle received data here, for example, update UI with the received data
+              console.log(data);
+    conversationsContainer.innerHTML += `<div class="conversation">${data.TextMessage}</div>`;
+    const messageId = data.Id;
+    const businessId = userData.businessId;
+
+    // Invoke SendUserData before and after MarkAsRead
+    hubConnection.invoke("SendUserData", userData)
+        .then(() => {
+            console.log('User data sent before marking as read');
+            return hubConnection.invoke("MarkAsRead", messageId, businessId);
+        })
+        .then(() => {
+            console.log('Message marked as read');
+            return hubConnection.invoke("SendUserData", userData);
+        })
+        .then(() => {
+            console.log('User data sent after marking as read');
+        })
+        .catch((error) => {
+            console.error('Error occurred:', error);
         });
-          hubConnection.on("RenderContacts", async () => {
-           hubConnection.invoke("SendUserData", userData);
         });
 
         
