@@ -125,6 +125,7 @@
         hubConnection.on("SendConversations", (data) => {
             console.log(data);
             conversationsContainer.innerHTML = "";
+             hubConnection.invoke("SendUserData", userData);
             // Loop through the received data and generate HTML for each conversation
             data.forEach(conversation => {
                 const conversationHTML = generateConversationsHTML(conversation);
