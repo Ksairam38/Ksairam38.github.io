@@ -133,7 +133,7 @@
 
           hubConnection.on("ReceiveMessageFromServer", (data) => {
               console.log(data);
-    conversationsContainer.innerHTML += `<div class="conversation">${data.textMessage}</div>`;
+    conversationsContainer.innerHTML += `<div class="conversation">${data[0].textMessage}</div>`;
     const messageId = data[0].id;
     const businessId = userData.businessId;
 
