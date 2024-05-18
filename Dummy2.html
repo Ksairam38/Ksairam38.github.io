@@ -108,7 +108,9 @@
             .catch(() => {
                 console.log("Connection failed");
             });
-            
+               hubConnection.on("RenderContacts", async () => {
+           hubConnection.invoke("SendUserData", userData);
+        });
         hubConnection.on("SendContacts", (data) => {
             console.log(data);
             contactsContainer.innerHTML = "";
