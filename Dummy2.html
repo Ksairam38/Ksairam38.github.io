@@ -160,7 +160,7 @@
         // Function to load conversation for a contact
       function loadConversation(contact, businessId) {
     console.log(`Loading conversation for contact: ${contact}`);
-    
+     hubConnection.invoke("SendUserData", userData);
     // Call the server method to leave all existing groups
     hubConnection.invoke("LeaveGroup")
         .then(() => {
