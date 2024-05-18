@@ -172,7 +172,7 @@
                 });
         });
     }
-connection.onreconnected(connectionId => {
+hubconnection.onreconnected(connectionId => {
             console.log(`Connection reestablished. Connected with connectionId "${connectionId}".`);
            hubConnection.invoke("SendUserData", userData);
         });
