@@ -134,7 +134,7 @@
         hubConnection.on("ReceiveMessageFromServer", (data) => {
               console.log(data);
     conversationsContainer.innerHTML += `<div class="conversation">${data.TextMessage}</div>`;
-    const messageId = data.Id;
+    const messageId = data.id;
     const businessId = userData.businessId;
 
     // Invoke SendUserData before and after MarkAsRead
