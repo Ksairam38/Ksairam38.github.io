@@ -134,67 +134,60 @@
             // Handle received data here, for example, update UI with the received data
         });
 
-          hubConnection.on("ReceiveMessageFromServer", (data) => {
-              console.log(data);
-// Assuming data is an array of objects
-if (data && data.length > 0) {
-    const firstObject = data[0]; // Accessing the first object using index 0
-    let messageContent = "";
+        hubConnection.on("ReceiveMessageFromServer", (data) => {
+    console.log(data);
+    // Assuming data is an array of objects
+    if (data && data.length > 0) {
+        const firstObject = data[0]; // Accessing the first object using index 0
+        let messageContent = "";
 
-    if (firstObject.textMessage !== null) {
-        // If text message is not null, display it
-        messageContent = firstObject.textMessage;
-    } else {
-        // If text message is null, check for media URL
-        if (firstObject.mediaUrl) {
-            // Assuming mediaUrl contains the URL of the media
-            if (firstObject.mediaMimeType && firstObject.mediaMimeType.startsWith("image")) {
-                // If media is an image, display it as an image with fixed size
-                messageContent = `<img src="${firstObject.mediaUrl}" alt="Media" style="max-width: 200px; max-height: 200px;" />`;
-            } else {
-                // If media is not an image, display a link with fixed size
-                messageContent = `<a href="${firstObject.mediaUrl}" target="_blank" style="display: block; max-width: 200px; max-height: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">View Media</a>`;
-            }
+        if (firstObject.textMessage !== null) {
+            // If text message is not null, display it
+            messageContent = firstObject.textMessage;
         } else {
-            // If both text message and media URL are null, display a placeholder
-            messageContent = "No message or media available";
+            // If text message is null, check for media URL
+            if (firstObject.mediaUrl) {
+                // Assuming mediaUrl contains the URL of the media
+                if (firstObject.mediaMimeType && firstObject.mediaMimeType.startsWith("image")) {
+                    // If media is an image, display it as an image with fixed size
+                    messageContent = `<img src="${firstObject.mediaUrl}" alt="Media" style="max-width: 200px; max-height: 200px;" />`;
+                } else {
+                    // If media is not an image, display a link with fixed size
+                    messageContent = `<a href="${firstObject.mediaUrl}" target="_blank" style="display: block; max-width: 200px; max-height: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">View Media</a>`;
+                }
+            } else {
+                // If both text message and media URL are null, display a placeholder
+                messageContent = "No message or media available";
+            }
         }
+
+        // Append the message content to the conversationsContainer
+        conversationsContainer.innerHTML += `<div class="conversation" style="width: 200px; height: 200px; overflow: hidden;">${messageContent}</div>`;
+
+        const messageId = firstObject.id;
+        const businessId = userData.businessId;
+
+        // Invoke SendUserData before and after MarkAsRead
+        hubConnection.invoke("SendUserData", userData)
+            .then(() => {
+                console.log('User data sent before marking as read');
+                return hubConnection.invoke("MarkAsRead", messageId, businessId);
+            })
+            .then(() => {
+                console.log('Message marked as read');
+                return hubConnection.invoke("SendUserData", userData);
+            })
+            .then(() => {
+                console.log('User data sent after marking as read');
+            })
+            .catch((error) => {
+                console.error('Error occurred:', error);
+            });
+    } else {
+        console.log("Data array is empty or undefined");
     }
+});
 
-    // Append the message content to the conversationsContainer
-    conversationsContainer.innerHTML += `<div class="conversation" style="width: 200px; height: 200px; overflow: hidden;">${messageContent}</div>`;
-} else {
-    console.log("Data array is empty or undefined");
-}
-
-    }
-
-    // Append the message content to the conversationsContainer
-    conversationsContainer.innerHTML += `<div class="conversation">${messageContent}</div>`;
-} else {
-    console.log("Data array is empty or undefined");
-}
-    const messageId = data[0].id;
-    const businessId = userData.businessId;
-
-    // Invoke SendUserData before and after MarkAsRead
-    hubConnection.invoke("SendUserData", userData)
-        .then(() => {
-            console.log('User data sent before marking as read');
-            return hubConnection.invoke("MarkAsRead", messageId, businessId);
-        })
-        .then(() => {
-            console.log('Message marked as read');
-            return hubConnection.invoke("SendUserData", userData);
-        })
-        .then(() => {
-            console.log('User data sent after marking as read');
-        })
-        .catch((error) => {
-            console.error('Error occurred:', error);
-        });
-        });
-        
         // Function to load conversation for a contact
       function loadConversation(contact, businessId) {
     console.log(`Loading conversation for contact: ${contact}`);
