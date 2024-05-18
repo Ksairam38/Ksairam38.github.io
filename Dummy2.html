@@ -131,9 +131,9 @@
             // Handle received data here, for example, update UI with the received data
         });
 
-        hubConnection.on("ReceiveMessageFromServer", (data) => {
+          hubConnection.on("ReceiveMessageFromServer", (data) => {
               console.log(data);
-    conversationsContainer.innerHTML += `<div class="conversation">${data.TextMessage}</div>`;
+    conversationsContainer.innerHTML += `<div class="conversation">${data.textMessage}</div>`;
     const messageId = data.id;
     const businessId = userData.businessId;
 
@@ -154,7 +154,6 @@
             console.error('Error occurred:', error);
         });
         });
-
         
         // Function to load conversation for a contact
       function loadConversation(contact, businessId) {
