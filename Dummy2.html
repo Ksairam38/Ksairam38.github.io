@@ -180,6 +180,7 @@ hubConnection.onreconnecting(error => {
 
 hubConnection.onreconnected(connectionId => {
     console.log(`Reconnected successfully with connectionId "${connectionId}".`);
+     hubConnection.invoke("SendUserData", userData);
     // You can optionally perform additional actions after successful reconnection.
 });
 
