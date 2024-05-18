@@ -136,7 +136,35 @@
 
           hubConnection.on("ReceiveMessageFromServer", (data) => {
               console.log(data);
-    conversationsContainer.innerHTML += `<div class="conversation">${data[0].textMessage}</div>`;
+    if (data && data.length > 0) {
+    const firstObject = data[0]; // Accessing the first object using index 0
+    let messageContent = "";
+
+    if (firstObject.textMessage !== null) {
+        // If text message is not null, display it
+        messageContent = firstObject.textMessage;
+    } else {
+        // If text message is null, check for media URL
+        if (firstObject.mediaUrl) {
+            // Assuming mediaUrl contains the URL of the media
+            if (firstObject.mediaMimeType && firstObject.mediaMimeType.startsWith("image")) {
+                // If media is an image, display it as an image
+                messageContent = `<img src="${firstObject.mediaUrl}" alt="Media" />`;
+            } else {
+                // If media is not an image, display a link
+                messageContent = `<a href="${firstObject.mediaUrl}" target="_blank">View Media</a>`;
+            }
+        } else {
+            // If both text message and media URL are null, display a placeholder
+            messageContent = "No message or media available";
+        }
+    }
+
+    // Append the message content to the conversationsContainer
+    conversationsContainer.innerHTML += `<div class="conversation">${messageContent}</div>`;
+} else {
+    console.log("Data array is empty or undefined");
+}
     const messageId = data[0].id;
     const businessId = userData.businessId;
 
