@@ -171,10 +171,16 @@
                 });
         });
     }
-hubconnection.onreconnected(connectionId => {
-            console.log(`Connection reestablished. Connected with connectionId "${connectionId}".`);
-           hubConnection.invoke("SendUserData", userData);
-        });
+hubConnection.onreconnecting(error => {
+    console.log("Connection lost. Reconnecting...");
+    console.error(error);
+});
+
+hubConnection.onreconnected(connectionId => {
+    console.log(`Reconnected successfully with connectionId "${connectionId}".`);
+    // You can optionally perform additional actions after successful reconnection.
+});
+
     // Function to send text message
     function sendTextMessage() {
         const textMessage = document.getElementById("textMessage").value;
