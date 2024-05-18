@@ -78,6 +78,8 @@
                     <p>Name: ${contact.name}</p>
                     <p>Chat Status: ${contact.chatStatus}</p>
                     <p>Assignee: ${contact.assignee}</p>
+                    <p>LastMessageAt: ${contact.lastMessageAt}</p>
+                    <p>UnRead: ${contact.unRead}</p>
                 </div>
             `;
         }
@@ -129,8 +131,10 @@
         });
 
         hubConnection.on("ReceiveMessageFromServer", (data) => {
-            console.log(data);
             conversationsContainer.innerHTML += data;
+              hubConnection.invoke("SendUserData", userData);
+            connection.invoke("MarkAsRead", data.Id, userData.businessId);
+         hubConnection.invoke("SendUserData", userData);
             // Handle received data here, for example, update UI with the received data
         });
           hubConnection.on("RenderContacts", async () => {
