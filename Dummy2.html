@@ -65,7 +65,23 @@
         const userData = {
             businessId: "99969011-7b1d-4c2d-92a6-fba9ca31a261",
             userId: "ece85174-fafd-43fb-a7a6-04c051f74de9",
-            operations: {}
+            operations: {
+                {
+ 
+  "filtering": {
+    "filterType": "and",
+    "conditions": [
+     {
+column: "ChatStatus",
+
+operator: "equals",
+value: "open"
+
+}
+    ]
+  }
+}
+            }
         };
         const contactsContainer = document.getElementById("contactsContainer");
         const conversationsContainer = document.getElementById("conversationsContainer");
