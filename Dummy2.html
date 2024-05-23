@@ -122,7 +122,7 @@
             .then(() => {
                 console.log("Connection started!");
                 // Send the userData object to the server after connection is established
-                hubConnection.invoke("SendUserData", userData.businessId,userData.userId,userId.operations);
+                hubConnection.invoke("SendUserData", userData.businessId,userData.userId,userData.operations);
             })
             .catch(() => {
                 console.log("Connection failed");
