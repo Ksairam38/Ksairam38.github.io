@@ -187,14 +187,14 @@
         const businessId = userData.businessId;
 
         // Invoke SendUserData before and after MarkAsRead
-        hubConnection.invoke("SendUserData", userData)
+        hubConnection.invoke("SendUserData",  userData.businessId,userData.userId,userData.operations)
             .then(() => {
                 console.log('User data sent before marking as read');
                 return hubConnection.invoke("MarkAsRead", messageId, businessId);
             })
             .then(() => {
                 console.log('Message marked as read');
-                return hubConnection.invoke("SendUserData", userData);
+                return hubConnection.invoke("SendUserData",  userData.businessId,userData.userId,userData.operations);
             })
             .then(() => {
                 console.log('User data sent after marking as read');
