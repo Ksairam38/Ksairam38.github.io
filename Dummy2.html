@@ -58,7 +58,13 @@
             <button onclick="sendMediaMessage()">Send Media Message</button>
         </div>
     </div>
-
+<div>
+        <h3>Send Template Message</h3>
+        <div>
+            <input type="text" id="templateId" placeholder="Enter template ID" />
+            <button onclick="sendTemplateMessage()">Send Template Message</button>
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
     <script>
    
@@ -108,7 +114,7 @@
         }
 
         const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("http://localhost:5057/conversations")
+            .withUrl("https://localhost:44381/conversations")
              .withAutomaticReconnect()  
             .build();
 
@@ -234,6 +240,21 @@ hubConnection.onreconnected(connectionId => {
         const data = {
             Contact: ["919848732198"], // List of contacts (replace with actual contacts)
             TextMessage: textMessage
+        };
+
+        hubConnection.invoke("SendTextOrEmojiMessage", data, userData.businessId)
+            .then(() => {
+                console.log("Text message sent successfully.");
+                // Optionally, update UI or display a success message
+            });
+    }
+function SendTemplate() {
+        const templateId = document.getElementById("templateId").value;
+        const data = {
+            Contact: ["919848732198"], // List of contacts (replace with actual contacts)
+            TemplateId: templateId,
+            BusinessId:"99969011-7B1D-4C2D-92A6-FBA9CA31A261",
+            UserId:"ECE85174-FAFD-43FB-A7A6-04C051F74DE9"
         };
 
         hubConnection.invoke("SendTextOrEmojiMessage", data, userData.businessId)
