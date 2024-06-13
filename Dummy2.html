@@ -257,7 +257,7 @@ function sendTemplate() {
             UserId:"ECE85174-FAFD-43FB-A7A6-04C051F74DE9"
         };
 
-        hubConnection.invoke("SendTextOrEmojiMessage", data, userData.businessId)
+        hubConnection.invoke("sendTemplate", data)
             .then(() => {
                 console.log("Text message sent successfully.");
                 // Optionally, update UI or display a success message
