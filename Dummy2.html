@@ -62,7 +62,7 @@
         <h3>Send Template Message</h3>
         <div>
             <input type="text" id="templateId" placeholder="Enter template ID" />
-            <button onclick="sendTemplateMessage()">Send Template Message</button>
+            <button onclick="sendTemplate()">Send Template Message</button>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.0/signalr.min.js"></script>
@@ -248,7 +248,7 @@ hubConnection.onreconnected(connectionId => {
                 // Optionally, update UI or display a success message
             });
     }
-function SendTemplate() {
+function sendTemplate() {
         const templateId = document.getElementById("templateId").value;
         const data = {
             Contact: ["919848732198"], // List of contacts (replace with actual contacts)
