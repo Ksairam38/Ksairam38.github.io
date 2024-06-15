@@ -57,7 +57,7 @@
     const code = response.authResponse.code;
     
     // Construct the URL with the code as a query parameter
-    const url = `https://fastsagewave8.conveyor.cloud/api/EmbeddedSignUp?code=${code}`;
+    const url = `https://localhost:44381/api/EmbeddedSignUp?code=${code}`;
 
     // Make a POST request using fetch
     fetch(url, {
