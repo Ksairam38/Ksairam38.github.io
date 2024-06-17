@@ -57,7 +57,7 @@
     const code = response.authResponse.code;
     
     // Construct the URL with the code as a query parameter
-    const url = `https://localhost:44381/api/EmbeddedSignUp/Embedded_Sign_up?BusinessId=99969011-7B1D-4C2D-92A6-FBA9CA31A261&code=${code}`;
+    const url = `https://localhost:44381/api/EmbeddedSignUp?BusinessId='99969011-7B1D-4C2D-92A6-FBA9CA31A261'&code=${code}`;
 
     // Make a POST request using fetch
     fetch(url, {
